@@ -46,6 +46,7 @@ class Agent:
         self.current_state = np.zeros((1, self.state_size))
         self.current_state[0][current_state] = 1
 
+        self.neuron_units = model_configs['neuron_units']
         self.activations = model_configs['activations']
         self.loss = model_configs['loss']
         self.kernel_initializers = model_configs['kernel_initializers']
@@ -80,7 +81,8 @@ class Agent:
         data_logger.info('Action Size --> {}'.format(self.action_size))
         data_logger.info('State Size --> {}'.format(self.state_size))
         data_logger.info('Action Space --> {}'.format(self.action_space))
-        data_logger.info('Activation Function --> {}'.format(self.activations))
+        data_logger.info('Activation Function --> {}  # [layer1, layer2, output_layer]'.format(self.activations))
+        data_logger.info('Neuron Units --> {}  # [hidden layer1, hidden layer2]'.format(self.neuron_units))
         data_logger.info('Loss Function --> {}'.format(self.loss))
         data_logger.info('Kernel Initializers --> {}'.format(self.kernel_initializers))
         data_logger.info('Discount Factor --> {}'.format(self.gamma))
@@ -99,9 +101,9 @@ class Agent:
         :return:
         """
         model = Sequential(name=name)
-        model.add(Dense(32, input_dim=self.state_size, activation=self.activations[0],
+        model.add(Dense(self.neuron_units[0], input_dim=self.state_size, activation=self.activations[0],
                         kernel_initializer=self.kernel_initializers[0]))
-        model.add(Dense(64, activation=self.activations[1],
+        model.add(Dense(self.neuron_units[1], activation=self.activations[1],
                         kernel_initializer=self.kernel_initializers[1]))
         model.add(Dense(self.action_size, activation=self.activations[2],
                         kernel_initializer=self.kernel_initializers[2]))
@@ -281,7 +283,7 @@ if __name__ == "__main__":
 
                 # log data to log files
                 data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
-                                 "  memory length:" + str(len(agent.training_data)) +
+                                 "  train data length:" + str(len(agent.training_data)) +
                                  "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
                                  "  epsilon:" + str(agent.epsilon))
 

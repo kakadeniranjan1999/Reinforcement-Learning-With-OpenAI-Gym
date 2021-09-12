@@ -15,6 +15,7 @@ AGENT:
   train_start_threshold: 500  # Starts training model after length of training_data_deque_max_len exceeds given value
 
 NN_MODEL:
+  neuron_units: [32, 64]  # [hidden layer1, hidden layer2]
   activations: ['swish', 'swish', 'linear']  # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
   kernel_initializers: ['he_uniform', 'he_uniform', 'he_uniform']  # Refer https://keras.io/api/layers/initializers/
   loss: 'mse'  # Refer https://keras.io/api/losses/
