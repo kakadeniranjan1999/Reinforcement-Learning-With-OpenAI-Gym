@@ -8,7 +8,7 @@ from collections import deque
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Sequential
-import matplotlib.pylab as pylab
+import matplotlib.pyplot as plt
 import warnings
 import os
 from config_reader import read_config
@@ -30,6 +30,15 @@ data_logger.addHandler(handler)
 
 class Agent:
     def __init__(self, current_state, action_space, state_size, action_size, agent_configs, model_configs):
+        """
+        Deep Q Learning Agent class
+        :param current_state: Current state of the environment
+        :param action_space: Action space related to the environment
+        :param state_size: Size of the environment state
+        :param action_size: Size of the action space
+        :param agent_configs: User defined agent configurations
+        :param model_configs: User defined model configurations
+        """
         self.action_size = action_size
         self.state_size = state_size
         self.action_space = action_space
@@ -56,12 +65,18 @@ class Agent:
         self.total_reward = 0.0
         self.total_success = 0.0
 
+        # Log basic agent related info to the log files
         self.log_basic_info()
 
-        self.model = self.build_nn_model('SLAVE')
-        self.target_model = self.build_nn_model('MASTER')
+        # Build and compile master and slave models
+        self.slave_model = self.build_nn_model('SLAVE')
+        self.master_model = self.build_nn_model('MASTER')
 
     def log_basic_info(self):
+        """
+        Logs basic Agent and Neural Network model related info to the log files
+        :return:
+        """
         data_logger.info('Action Size --> {}'.format(self.action_size))
         data_logger.info('State Size --> {}'.format(self.state_size))
         data_logger.info('Action Space --> {}'.format(self.action_space))
@@ -78,6 +93,11 @@ class Agent:
         data_logger.info('Model Checkpoint --> {}'.format(self.model_checkpoint))
 
     def build_nn_model(self, name):
+        """
+        Builds and compiles neural network model
+        :param name: Name of the model
+        :return:
+        """
         model = Sequential(name=name)
         model.add(Dense(32, input_dim=self.state_size, activation=self.activations[0],
                         kernel_initializer=self.kernel_initializers[0]))
@@ -90,19 +110,33 @@ class Agent:
         return model
 
     def update_target_model(self):
-        self.target_model.set_weights(self.model.get_weights())
+        """
+        Updates master NN model with weights of the slave NN model
+        :return:
+        """
+        self.master_model.set_weights(self.slave_model.get_weights())
 
     def get_action(self):
+        """
+        Computes executable action for the agent considering epsilon-greedy factor
+        :return: executable action
+        """
         if np.random.rand() <= self.epsilon:
             return random.randrange(self.action_size)
         else:
-            q_value = self.model.predict(self.current_state)
+            q_value = self.slave_model.predict(self.current_state)
             return np.argmax(q_value[0])
 
     def train(self):
+        """
+        Trains the model on user defined batch size
+        :return:
+        """
+        # Validate training data array size
         if len(self.training_data) < self.train_start_threshold:
             return
 
+        # Sample random batch sized data entries
         train_batch = random.sample(self.training_data, self.batch_size)
 
         update_input = np.zeros((self.batch_size, self.state_size))
@@ -116,20 +150,27 @@ class Agent:
             update_target[i] = train_batch[i][3]
             done.append(train_batch[i][4])
 
-        target = self.model.predict(update_input)
-        target_val = self.target_model.predict(update_target)
+        # predict q-values for sampled batch sized data
+        target = self.slave_model.predict(update_input)
+        target_val = self.master_model.predict(update_target)
 
+        # Update target q-values
         for i in range(self.batch_size):
             if done[i]:
                 target[i][action[i]] = reward[i]
             else:
                 target[i][action[i]] = reward[i] + (self.gamma * np.amax(target_val[i]))
 
-        self.model.fit(update_input, target, batch_size=self.batch_size, epochs=1, verbose=0)
+        # Fit model
+        self.slave_model.fit(update_input, target, batch_size=self.batch_size, epochs=1, verbose=0)
 
 
 class Environment:
     def __init__(self, env_configs):
+        """
+        Environment class that contains customized environment entities
+        :param env_configs: User defined environment configurations
+        """
         self.environment_name = env_configs['env_name']
         self.env = gym.make(env_configs['env_name'])
         self.state = self.env.reset()
@@ -143,12 +184,23 @@ class Environment:
         self.log_basic_info()
 
     def log_basic_info(self):
+        """
+        Logs basic Environment related info to the log files
+        :return:
+        """
         data_logger.info('Environment --> {}'.format(self.environment_name))
         data_logger.info('Positive Step Reward --> {}'.format(self.positive_step_reward))
         data_logger.info('Negative Step Reward --> {}'.format(self.negative_step_reward))
         data_logger.info('Goal Step Reward --> {}'.format(self.goal_step_reward))
 
     def get_reward(self, reward, done, total_success):
+        """
+        Assigns customized rewards to the executed actions
+        :param reward: Reward provided by the environment
+        :param done: Boolean flag indicating episode termination status
+        :param total_success: Current number of successful goal chases
+        :return:
+        """
         if not done and reward == 0:
             reward = self.positive_step_reward
         elif done and reward == 0:
@@ -163,30 +215,45 @@ class Environment:
 
 
 if __name__ == "__main__":
+    # Get configuration for environment, agent and neural network model
     config_data = read_config('config/FrozenLakeDQN.yml', data_logger)
-    plot_data = {'EPISODES': [], 'TOTAL_REWARD': [], 'TOTAL_SUCCESS': []}
 
+    # Instantiate environment
     environment = Environment(env_configs=config_data['ENVIRONMENT'])
+
+    # Instantiate agent
     agent = Agent(environment.state, environment.action_space, environment.env.observation_space.n,
                   environment.action_space.n, config_data['AGENT'], config_data['NN_MODEL'])
 
+    # Data loggers for plotting training progress
+    plot_data = {'EPISODES': [0.0],
+                 'TOTAL_REWARD': [agent.total_reward],
+                 'TOTAL_SUCCESS': [agent.total_success],
+                 'EPSILON': [agent.epsilon]
+                 }
+
     for episode in range(agent.total_episodes):
+        # Reset environment at the beginning of the episode
         agent.current_state = np.zeros((1, agent.state_size))
         agent.current_state[0][environment.env.reset()] = 1
         done = False
 
         while not done:
+            # get action for the agent
             action = agent.get_action()
+
+            # perform action in the environment
             next_state, reward, done, info = environment.env.step(action)
 
             agent.next_state = np.zeros((1, agent.state_size))
             agent.next_state[0][next_state] = 1
 
+            # get customized reward for the action
             reward, agent.total_success = environment.get_reward(reward, done, agent.total_success)
 
+            # append data to training array
             agent.training_data.append((agent.current_state, action, reward, agent.next_state, done))
-            if done:
-                agent.epsilon = agent.epsilon * 0.99
+
             agent.train()
             agent.current_state = agent.next_state
             agent.total_reward += reward
@@ -195,21 +262,32 @@ if __name__ == "__main__":
                 environment.env.render()
 
             if done:
+                # update epsilon-greedy factor
+                agent.epsilon = agent.epsilon * 0.99
+
+                # append training progress to array
+                plot_data['EPSILON'].append(agent.epsilon)
                 plot_data['TOTAL_REWARD'].append(agent.total_reward)
                 plot_data['TOTAL_SUCCESS'].append(agent.total_success)
                 plot_data['EPISODES'].append(episode)
 
-                pylab.plot(plot_data['EPISODES'], plot_data['TOTAL_REWARD'], 'b')
-                pylab.plot(plot_data['EPISODES'], plot_data['TOTAL_SUCCESS'], 'r')
-                pylab.savefig("InferenceData/FrozenLakeDQN/InferenceGraph_" + start_timestamp + ".png")
+                # plot training progress
+                plt.plot(plot_data['EPISODES'], plot_data['TOTAL_REWARD'], 'b')
+                plt.plot(plot_data['EPISODES'], plot_data['TOTAL_SUCCESS'], 'r')
+                plt.plot(plot_data['EPISODES'], plot_data['EPSILON'], 'g')
 
-                data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) + "  memory length:" +
-                                 str(len(agent.training_data)) + "  total success:" + str(agent.total_success) +
-                                 "  current reward:" + str(reward) +
+                # save graph plot
+                plt.savefig("InferenceData/FrozenLakeDQN/InferenceGraph_" + start_timestamp + ".png")
+
+                # log data to log files
+                data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
+                                 "  memory length:" + str(len(agent.training_data)) +
+                                 "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
                                  "  epsilon:" + str(agent.epsilon))
 
-                # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 490:
+                # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 5000:
                 #     sys.exit()
 
+            # save model after every checkpoint episode provided by user
             if episode % agent.model_checkpoint == 0:
-                agent.model.save("trained_models/FrozenLakeDQN/FrozenLakeDQN_" + start_timestamp + ".h5")
+                agent.slave_model.save("trained_models/FrozenLakeDQN/FrozenLakeDQN_" + start_timestamp + ".h5")
