@@ -8,6 +8,7 @@ from collections import deque
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.callbacks import History
 import matplotlib.pyplot as plt
 import warnings
 import os
@@ -52,6 +53,7 @@ class Agent:
         self.kernel_initializers = model_configs['kernel_initializers']
         self.learning_rate = model_configs['learning_rate']
         self.model_checkpoint = model_configs['model_checkpoint']
+        self.history = History()
 
         self.total_episodes = agent_configs['total_episodes']
         self.gamma = agent_configs['gamma']
@@ -164,7 +166,8 @@ class Agent:
                 target[i][action[i]] = reward[i] + (self.gamma * np.amax(target_val[i]))
 
         # Fit model
-        self.slave_model.fit(update_input, target, batch_size=self.batch_size, epochs=1, verbose=0)
+        self.slave_model.fit(update_input, target, batch_size=self.batch_size, epochs=1, verbose=0,
+                             callbacks=[self.history])
 
 
 class Environment:
@@ -234,6 +237,17 @@ if __name__ == "__main__":
                  'EPSILON': [agent.epsilon]
                  }
 
+    # Create a subplot with 2 rows and columns each
+    figure, axis = plt.subplots(2, 2, figsize=(20, 20))
+    axis[0, 0].set_title("Episodes vs Epsilon")
+    axis[0, 1].set_title("Episodes vs Total Reward")
+    axis[1, 0].set_title("Episodes vs Total Success")
+    axis[1, 1].set_title("Episodes vs Avg Loss")
+
+    # Array of average loss after termination of each episode
+    avg_loss = np.array([])
+    loss_episodes = np.array([])
+
     for episode in range(agent.total_episodes):
         # Reset environment at the beginning of the episode
         agent.current_state = np.zeros((1, agent.state_size))
@@ -274,18 +288,30 @@ if __name__ == "__main__":
                 plot_data['EPISODES'].append(episode)
 
                 # plot training progress
-                plt.plot(plot_data['EPISODES'], plot_data['TOTAL_REWARD'], 'b')
-                plt.plot(plot_data['EPISODES'], plot_data['TOTAL_SUCCESS'], 'r')
-                plt.plot(plot_data['EPISODES'], plot_data['EPSILON'], 'g')
-
-                # save graph plot
-                plt.savefig("InferenceData/FrozenLakeDQN/InferenceGraph_" + start_timestamp + ".png")
+                axis[0, 0].plot(plot_data['EPISODES'], plot_data['EPSILON'], 'y')
+                axis[0, 1].plot(plot_data['EPISODES'], plot_data['TOTAL_REWARD'], 'b')
+                axis[1, 0].plot(plot_data['EPISODES'], plot_data['TOTAL_SUCCESS'], 'g')
 
                 # log data to log files
-                data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
-                                 "  train data length:" + str(len(agent.training_data)) +
-                                 "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
-                                 "  epsilon:" + str(agent.epsilon))
+                try:
+                    avg_loss = np.append(avg_loss, np.average(agent.history.history['loss']))
+                    loss_episodes = np.append(loss_episodes, episode)
+                    axis[1, 1].plot(loss_episodes, avg_loss, 'r')
+
+                    data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
+                                     "  train data length:" + str(len(agent.training_data)) +
+                                     "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
+                                     "  epsilon:" + str(agent.epsilon) +
+                                     "  Avg Loss:" + str(avg_loss[-1]))
+                except KeyError:
+                    data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
+                                     "  train data length:" + str(len(agent.training_data)) +
+                                     "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
+                                     "  epsilon:" + str(agent.epsilon))
+
+                # save graph plot
+                plt.tight_layout()
+                plt.savefig("InferenceData/FrozenLakeDQN/InferenceGraph_" + start_timestamp + ".png")
 
                 # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 5000:
                 #     sys.exit()
