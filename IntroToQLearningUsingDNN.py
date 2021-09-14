@@ -248,6 +248,9 @@ if __name__ == "__main__":
                      'EPSILON': [agent.epsilon]
                      }
 
+        # Create a list to trace the path followed by agent
+        path_followed = []
+
         # Create a subplot with 2 rows and columns each
         figure, axis = plt.subplots(2, 2, figsize=(20, 20))
         axis[0, 0].set_title("Episodes vs Epsilon")
@@ -264,8 +267,13 @@ if __name__ == "__main__":
             agent.current_state = np.zeros((1, agent.state_size))
             agent.current_state[0][environment.env.reset()] = 1
             done = False
+            path_followed = []
 
             while not done:
+                # append current state in to an array to trace the path followed by the agent. This will help to
+                # check overfitting of model.
+                path_followed.append(np.argwhere(agent.current_state[0] == 1)[0][0])
+
                 # get action for the agent
                 action = agent.get_action()
 
@@ -314,13 +322,15 @@ if __name__ == "__main__":
                                          "  total success:" + str(agent.total_success) + "  current reward:" + str(
                             reward) +
                                          "  epsilon:" + str(agent.epsilon) +
-                                         "  Avg Loss:" + str(avg_loss[-1]))
+                                         "  Avg Loss:" + str(avg_loss[-1]) +
+                                         "  Path Followed:" + str(path_followed))
                     except KeyError:
                         data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
                                          "  train data length:" + str(len(agent.training_data)) +
                                          "  total success:" + str(agent.total_success) + "  current reward:" + str(
                             reward) +
-                                         "  epsilon:" + str(agent.epsilon))
+                                         "  epsilon:" + str(agent.epsilon) +
+                                         "  Path Followed:" + str(path_followed))
 
                     # save graph plot
                     plt.tight_layout()
