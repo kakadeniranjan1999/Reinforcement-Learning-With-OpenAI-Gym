@@ -1,5 +1,13 @@
 ENVIRONMENT:
   env_name: 'FrozenLake-v1'
+  custom_map_flag: False
+  custom_map: [
+      'SFFHF',
+      'HFHFF',
+      'HFFFH',
+      'HHHFH',
+      'HFFFG'
+  ]  # Define custom_map of n x n dimensions only if custom_map_flag is set True
   render_flag: False
   rewards:
     positive_step_reward: 0.25  # Reward for ending up on FROZEN surface

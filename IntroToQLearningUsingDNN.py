@@ -177,7 +177,12 @@ class Environment:
         :param env_configs: User defined environment configurations
         """
         self.environment_name = env_configs['env_name']
-        self.env = gym.make(env_configs['env_name'])
+        self.custom_map_flag = env_configs['custom_map_flag']
+        if self.custom_map_flag:
+            self.custom_map = env_configs['custom_map']
+        else:
+            self.custom_map = None
+        self.env = gym.make(self.environment_name, desc=self.custom_map)
         self.state = self.env.reset()
         self.action_space = self.env.action_space
         self.render = env_configs['render_flag']
@@ -194,6 +199,12 @@ class Environment:
         :return:
         """
         data_logger.info('Environment --> {}'.format(self.environment_name))
+        data_logger.info('Custom Environment Map Flag --> {}'.format(self.custom_map_flag))
+        data_logger.info('Environment Map --> {}'.format(self.custom_map if self.custom_map_flag else ['SFFF',
+                                                                                                       'FHFH',
+                                                                                                       'FFFH',
+                                                                                                       'HFFG'
+                                                                                                       ]))
         data_logger.info('Positive Step Reward --> {}'.format(self.positive_step_reward))
         data_logger.info('Negative Step Reward --> {}'.format(self.negative_step_reward))
         data_logger.info('Goal Step Reward --> {}'.format(self.goal_step_reward))
