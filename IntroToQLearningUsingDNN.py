@@ -331,4 +331,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         data_logger.warning('KeyBoard Interrupt')
     except Exception as e:
-        data_logger.error(e)
+        data_logger.error('Error at LINE --> {} --> {}'.format(sys.exc_info()[2].tb_lineno, e))
