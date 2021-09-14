@@ -20,12 +20,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 start_timestamp = datetime.datetime.now().strftime("%d-%h-%Y_%H-%M-%S")
 
 logging.basicConfig(format='%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s', level=logging.INFO,
-                    filename='logs/FrozenLakeDQN/FrozenLakeDQN_' + start_timestamp + '.log', filemode='w')
+                    filename='logs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', filemode='w')
 data_logger = logging.getLogger()
 handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s')
 handler.setFormatter(formatter)
-handler.setLevel(logging.DEBUG)
+handler.setLevel(logging.INFO)
 data_logger.addHandler(handler)
 
 
@@ -220,102 +220,113 @@ class Environment:
 
 
 if __name__ == "__main__":
-    # Get configuration for environment, agent and neural network model
-    config_data = read_config('config/FrozenLakeDQN.yml', data_logger)
+    try:
+        # Get configuration for environment, agent and neural network model
+        config_data = read_config('config/FrozenLakeDQN.yml', data_logger)
 
-    # Instantiate environment
-    environment = Environment(env_configs=config_data['ENVIRONMENT'])
+        os.rename('logs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', 'logs/FrozenLakeDQN/' +
+                  config_data['ENVIRONMENT']['env_name'] + '_' + start_timestamp + '.log')
 
-    # Instantiate agent
-    agent = Agent(environment.state, environment.action_space, environment.env.observation_space.n,
-                  environment.action_space.n, config_data['AGENT'], config_data['NN_MODEL'])
+        # Instantiate environment
+        environment = Environment(env_configs=config_data['ENVIRONMENT'])
 
-    # Data loggers for plotting training progress
-    plot_data = {'EPISODES': [0.0],
-                 'TOTAL_REWARD': [agent.total_reward],
-                 'TOTAL_SUCCESS': [agent.total_success],
-                 'EPSILON': [agent.epsilon]
-                 }
+        # Instantiate agent
+        agent = Agent(environment.state, environment.action_space, environment.env.observation_space.n,
+                      environment.action_space.n, config_data['AGENT'], config_data['NN_MODEL'])
 
-    # Create a subplot with 2 rows and columns each
-    figure, axis = plt.subplots(2, 2, figsize=(20, 20))
-    axis[0, 0].set_title("Episodes vs Epsilon")
-    axis[0, 1].set_title("Episodes vs Total Reward")
-    axis[1, 0].set_title("Episodes vs Total Success")
-    axis[1, 1].set_title("Episodes vs Avg Loss")
+        # Data loggers for plotting training progress
+        plot_data = {'EPISODES': [0.0],
+                     'TOTAL_REWARD': [agent.total_reward],
+                     'TOTAL_SUCCESS': [agent.total_success],
+                     'EPSILON': [agent.epsilon]
+                     }
 
-    # Array of average loss after termination of each episode
-    avg_loss = np.array([])
-    loss_episodes = np.array([])
+        # Create a subplot with 2 rows and columns each
+        figure, axis = plt.subplots(2, 2, figsize=(20, 20))
+        axis[0, 0].set_title("Episodes vs Epsilon")
+        axis[0, 1].set_title("Episodes vs Total Reward")
+        axis[1, 0].set_title("Episodes vs Total Success")
+        axis[1, 1].set_title("Episodes vs Avg Loss")
 
-    for episode in range(agent.total_episodes):
-        # Reset environment at the beginning of the episode
-        agent.current_state = np.zeros((1, agent.state_size))
-        agent.current_state[0][environment.env.reset()] = 1
-        done = False
+        # Array of average loss after termination of each episode
+        avg_loss = np.array([])
+        loss_episodes = np.array([])
 
-        while not done:
-            # get action for the agent
-            action = agent.get_action()
+        for episode in range(agent.total_episodes):
+            # Reset environment at the beginning of the episode
+            agent.current_state = np.zeros((1, agent.state_size))
+            agent.current_state[0][environment.env.reset()] = 1
+            done = False
 
-            # perform action in the environment
-            next_state, reward, done, info = environment.env.step(action)
+            while not done:
+                # get action for the agent
+                action = agent.get_action()
 
-            agent.next_state = np.zeros((1, agent.state_size))
-            agent.next_state[0][next_state] = 1
+                # perform action in the environment
+                next_state, reward, done, info = environment.env.step(action)
 
-            # get customized reward for the action
-            reward, agent.total_success = environment.get_reward(reward, done, agent.total_success)
+                agent.next_state = np.zeros((1, agent.state_size))
+                agent.next_state[0][next_state] = 1
 
-            # append data to training array
-            agent.training_data.append((agent.current_state, action, reward, agent.next_state, done))
+                # get customized reward for the action
+                reward, agent.total_success = environment.get_reward(reward, done, agent.total_success)
 
-            agent.train()
-            agent.current_state = agent.next_state
-            agent.total_reward += reward
+                # append data to training array
+                agent.training_data.append((agent.current_state, action, reward, agent.next_state, done))
 
-            if environment.render:
-                environment.env.render()
+                agent.train()
+                agent.current_state = agent.next_state
+                agent.total_reward += reward
 
-            if done:
-                # update epsilon-greedy factor
-                agent.epsilon = agent.epsilon * 0.99
+                if environment.render:
+                    environment.env.render()
 
-                # append training progress to array
-                plot_data['EPSILON'].append(agent.epsilon)
-                plot_data['TOTAL_REWARD'].append(agent.total_reward)
-                plot_data['TOTAL_SUCCESS'].append(agent.total_success)
-                plot_data['EPISODES'].append(episode)
+                if done:
+                    # update epsilon-greedy factor
+                    agent.epsilon = agent.epsilon * 0.99
 
-                # plot training progress
-                axis[0, 0].plot(plot_data['EPISODES'], plot_data['EPSILON'], 'y')
-                axis[0, 1].plot(plot_data['EPISODES'], plot_data['TOTAL_REWARD'], 'b')
-                axis[1, 0].plot(plot_data['EPISODES'], plot_data['TOTAL_SUCCESS'], 'g')
+                    # append training progress to array
+                    plot_data['EPSILON'].append(agent.epsilon)
+                    plot_data['TOTAL_REWARD'].append(agent.total_reward)
+                    plot_data['TOTAL_SUCCESS'].append(agent.total_success)
+                    plot_data['EPISODES'].append(episode)
 
-                # log data to log files
-                try:
-                    avg_loss = np.append(avg_loss, np.average(agent.history.history['loss']))
-                    loss_episodes = np.append(loss_episodes, episode)
-                    axis[1, 1].plot(loss_episodes, avg_loss, 'r')
+                    # plot training progress
+                    axis[0, 0].plot(plot_data['EPISODES'], plot_data['EPSILON'], 'y')
+                    axis[0, 1].plot(plot_data['EPISODES'], plot_data['TOTAL_REWARD'], 'b')
+                    axis[1, 0].plot(plot_data['EPISODES'], plot_data['TOTAL_SUCCESS'], 'g')
 
-                    data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
-                                     "  train data length:" + str(len(agent.training_data)) +
-                                     "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
-                                     "  epsilon:" + str(agent.epsilon) +
-                                     "  Avg Loss:" + str(avg_loss[-1]))
-                except KeyError:
-                    data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
-                                     "  train data length:" + str(len(agent.training_data)) +
-                                     "  total success:" + str(agent.total_success) + "  current reward:" + str(reward) +
-                                     "  epsilon:" + str(agent.epsilon))
+                    # log data to log files
+                    try:
+                        avg_loss = np.append(avg_loss, np.average(agent.history.history['loss']))
+                        loss_episodes = np.append(loss_episodes, episode)
+                        axis[1, 1].plot(loss_episodes, avg_loss, 'r')
 
-                # save graph plot
-                plt.tight_layout()
-                plt.savefig("InferenceData/FrozenLakeDQN/InferenceGraph_" + start_timestamp + ".png")
+                        data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
+                                         "  train data length:" + str(len(agent.training_data)) +
+                                         "  total success:" + str(agent.total_success) + "  current reward:" + str(
+                            reward) +
+                                         "  epsilon:" + str(agent.epsilon) +
+                                         "  Avg Loss:" + str(avg_loss[-1]))
+                    except KeyError:
+                        data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
+                                         "  train data length:" + str(len(agent.training_data)) +
+                                         "  total success:" + str(agent.total_success) + "  current reward:" + str(
+                            reward) +
+                                         "  epsilon:" + str(agent.epsilon))
 
-                # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 5000:
-                #     sys.exit()
+                    # save graph plot
+                    plt.tight_layout()
+                    plt.savefig("InferenceData/FrozenLakeDQN/" + config_data['ENVIRONMENT'][
+                        'env_name'] + '_' + start_timestamp + ".png")
 
-            # save model after every checkpoint episode provided by user
-            if episode % agent.model_checkpoint == 0:
-                agent.slave_model.save("trained_models/FrozenLakeDQN/FrozenLakeDQN_" + start_timestamp + ".h5")
+                    # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 5000:
+                    #     sys.exit()
+
+                # save model after every checkpoint episode provided by user
+                if episode % agent.model_checkpoint == 0:
+                    agent.slave_model.save(
+                        "trained_models/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' +
+                        start_timestamp + ".h5")
+    except KeyboardInterrupt:
+        data_logger.warning('KeyBoard Interrupt')
