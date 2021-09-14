@@ -185,6 +185,7 @@ class Environment:
         self.env = gym.make(self.environment_name, desc=self.custom_map)
         self.state = self.env.reset()
         self.action_space = self.env.action_space
+        self.action_desc = {0: 'Left', 1: 'Down', 2: 'Right', 3: 'Up'}
         self.render = env_configs['render_flag']
 
         self.positive_step_reward = env_configs['rewards']['positive_step_reward']
@@ -248,8 +249,9 @@ if __name__ == "__main__":
                      'EPSILON': [agent.epsilon]
                      }
 
-        # Create a list to trace the path followed by agent
+        # Create a list to trace the path followed and action taken by agent
         path_followed = []
+        action_executed = []
 
         # Create a subplot with 2 rows and columns each
         figure, axis = plt.subplots(2, 2, figsize=(20, 20))
@@ -268,6 +270,7 @@ if __name__ == "__main__":
             agent.current_state[0][environment.env.reset()] = 1
             done = False
             path_followed = []
+            action_executed = []
 
             while not done:
                 # append current state in to an array to trace the path followed by the agent. This will help to
@@ -276,6 +279,9 @@ if __name__ == "__main__":
 
                 # get action for the agent
                 action = agent.get_action()
+
+                # append action selected by agent to an array
+                action_executed.append(environment.action_desc[action])
 
                 # perform action in the environment
                 next_state, reward, done, info = environment.env.step(action)
@@ -323,14 +329,16 @@ if __name__ == "__main__":
                             reward) +
                                          "  epsilon:" + str(agent.epsilon) +
                                          "  Avg Loss:" + str(avg_loss[-1]) +
-                                         "  Path Followed:" + str(path_followed))
+                                         "  Path Followed:" + str(path_followed) +
+                                         "  Action Executed:" + str(action_executed))
                     except KeyError:
                         data_logger.info("episode:" + str(episode) + "  total reward:" + str(agent.total_reward) +
                                          "  train data length:" + str(len(agent.training_data)) +
                                          "  total success:" + str(agent.total_success) + "  current reward:" + str(
                             reward) +
                                          "  epsilon:" + str(agent.epsilon) +
-                                         "  Path Followed:" + str(path_followed))
+                                         "  Path Followed:" + str(path_followed) +
+                                         "  Action Executed:" + str(action_executed))
 
                     # save graph plot
                     plt.tight_layout()
