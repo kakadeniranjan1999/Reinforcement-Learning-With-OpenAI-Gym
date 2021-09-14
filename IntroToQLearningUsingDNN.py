@@ -330,3 +330,5 @@ if __name__ == "__main__":
                         start_timestamp + ".h5")
     except KeyboardInterrupt:
         data_logger.warning('KeyBoard Interrupt')
+    except Exception as e:
+        data_logger.error(e)
