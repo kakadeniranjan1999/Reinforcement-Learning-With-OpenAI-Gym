@@ -9,6 +9,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import History
+from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import warnings
 import os
@@ -65,6 +66,9 @@ class Agent:
         self.training_data = deque(maxlen=self.training_data_deque_max_len)
         self.train_start_threshold = agent_configs['train_start_threshold']
 
+        self.load_model_flag = agent_configs['load_model_flag']
+        self.model_path = agent_configs['model_path']
+
         self.total_reward = 0.0
         self.total_success = 0.0
 
@@ -74,6 +78,10 @@ class Agent:
         # Build and compile master and slave models
         self.slave_model = self.build_nn_model('SLAVE')
         self.master_model = self.build_nn_model('MASTER')
+
+        if self.load_model_flag:
+            self.slave_model = load_model(self.model_path)
+            self.master_model = load_model(self.model_path)
 
     def log_basic_info(self):
         """
@@ -95,6 +103,8 @@ class Agent:
         data_logger.info('Training Batch Size --> {}'.format(self.batch_size))
         data_logger.info('Training Start Threshold --> {}'.format(self.train_start_threshold))
         data_logger.info('Model Checkpoint --> {}'.format(self.model_checkpoint))
+        data_logger.info('Load Model Flag --> {}'.format(self.load_model_flag))
+        data_logger.info('Model Path --> {}'.format(self.model_path if self.load_model_flag else None))
 
     def build_nn_model(self, name):
         """
@@ -125,7 +135,7 @@ class Agent:
         Computes executable action for the agent considering epsilon-greedy factor
         :return: executable action
         """
-        if self.min_epsilon < self.epsilon:
+        if self.min_epsilon < self.epsilon and not self.load_model_flag:
             return random.randrange(self.action_size)
         else:
             q_value = self.slave_model.predict(self.current_state)
