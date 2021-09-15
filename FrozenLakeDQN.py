@@ -1,33 +1,28 @@
-import datetime
+import os
 import sys
-import logging
 import gym
 import random
+import datetime
+import warnings
 import numpy as np
 from collections import deque
+import matplotlib.pyplot as plt
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import History
 from tensorflow.keras.models import load_model
-import matplotlib.pyplot as plt
-import warnings
-import os
 from config_reader import read_config
+from get_logger import get_logger
 
 warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 start_timestamp = datetime.datetime.now().strftime("%d-%h-%Y_%H-%M-%S")
+log_filename = 'TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log'
+console_output_format = '%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s'
 
-logging.basicConfig(format='%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s', level=logging.INFO,
-                    filename='TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', filemode='w')
-data_logger = logging.getLogger()
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s')
-handler.setFormatter(formatter)
-handler.setLevel(logging.INFO)
-data_logger.addHandler(handler)
+data_logger = get_logger(console_output_format, log_filename)
 
 
 class Agent:
@@ -242,15 +237,31 @@ if __name__ == "__main__":
         # Get configuration for environment, agent and neural network model
         config_data = read_config('config/FrozenLakeDQN.yml', data_logger)
 
-        os.rename('TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', 'TrainingLogs/FrozenLakeDQN/' +
-                  config_data['ENVIRONMENT']['env_name'] + '_' + start_timestamp + '.log')
-
         # Instantiate environment
         environment = Environment(env_configs=config_data['ENVIRONMENT'])
 
         # Instantiate agent
         agent = Agent(environment.state, environment.action_space, environment.env.observation_space.n,
                       environment.action_space.n, config_data['AGENT'], config_data['NN_MODEL'])
+
+        if agent.load_model_flag:
+            # save model, png and log files with following names in case previous model is being retrained
+            data_logger.warning("Using PreTrained Model {}".format(agent.model_path.rsplit('/')[-1]))
+
+            logfile_path = 'TrainingLogs/FrozenLakeDQN/' + agent.model_path.rsplit('/')[-1][:-3] + '_Retrained_' + \
+                           start_timestamp + '.log'
+            model_path = agent.model_path[:-3] + '_Retrained_' + start_timestamp + '.h5'
+            png_path = "TrainingPlots/FrozenLakeDQN/" + agent.model_path.rsplit('/')[-1][:-3] + '_Retrained_' + \
+                       start_timestamp + '.png'
+        else:
+            logfile_path = 'TrainingLogs/FrozenLakeDQN/' + config_data['ENVIRONMENT']['env_name'] + '_' + \
+                           start_timestamp + '.log'
+            model_path = "TrainedModels/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' + \
+                         start_timestamp + ".h5"
+            png_path = "TrainingPlots/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' + start_timestamp \
+                       + ".png"
+
+        os.rename('TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', logfile_path)
 
         # Data loggers for plotting training progress
         plot_data = {'EPISODES': [0.0],
@@ -352,17 +363,14 @@ if __name__ == "__main__":
 
                     # save graph plot
                     plt.tight_layout()
-                    plt.savefig("TrainingPlots/FrozenLakeDQN/" + config_data['ENVIRONMENT'][
-                        'env_name'] + '_' + start_timestamp + ".png")
+                    plt.savefig(png_path)
 
                     # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 5000:
                     #     sys.exit()
 
                 # save model after every checkpoint episode provided by user
                 if episode % agent.model_checkpoint == 0:
-                    agent.slave_model.save(
-                        "TrainedModels/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' +
-                        start_timestamp + ".h5")
+                    agent.slave_model.save(model_path)
     except KeyboardInterrupt:
         data_logger.warning('KeyBoard Interrupt')
     except Exception as e:
