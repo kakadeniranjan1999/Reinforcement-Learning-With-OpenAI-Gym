@@ -6,7 +6,7 @@ def get_logger(console_output_format, log_filename):
                         filename=log_filename, filemode='w')
     data_logger = logging.getLogger()
     handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s')
+    formatter = logging.Formatter(console_output_format)
     handler.setFormatter(formatter)
     handler.setLevel(logging.INFO)
     data_logger.addHandler(handler)
