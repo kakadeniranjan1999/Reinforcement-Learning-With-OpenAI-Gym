@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore")
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 start_timestamp = datetime.datetime.now().strftime("%d-%h-%Y_%H-%M-%S")
-log_filename = 'TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log'
+log_filename = 'Training/TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log'
 console_output_format = '%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s'
 
 data_logger = get_logger(console_output_format, log_filename)
@@ -248,20 +248,22 @@ if __name__ == "__main__":
             # save model, png and log files with following names in case previous model is being retrained
             data_logger.warning("Using PreTrained Model {}".format(agent.model_path.rsplit('/')[-1]))
 
-            logfile_path = 'TrainingLogs/FrozenLakeDQN/' + agent.model_path.rsplit('/')[-1][:-3] + '_Retrained_' + \
+            logfile_path = 'Training/TrainingLogs/FrozenLakeDQN/' + agent.model_path.rsplit('/')[-1][
+                                                                        :-3] + '_Retrained_' + \
                            start_timestamp + '.log'
             model_path = agent.model_path[:-3] + '_Retrained_' + start_timestamp + '.h5'
-            png_path = "TrainingPlots/FrozenLakeDQN/" + agent.model_path.rsplit('/')[-1][:-3] + '_Retrained_' + \
+            png_path = "Training/TrainingPlots/FrozenLakeDQN/" + agent.model_path.rsplit('/')[-1][
+                                                                     :-3] + '_Retrained_' + \
                        start_timestamp + '.png'
         else:
-            logfile_path = 'TrainingLogs/FrozenLakeDQN/' + config_data['ENVIRONMENT']['env_name'] + '_' + \
+            logfile_path = 'Training/TrainingLogs/FrozenLakeDQN/' + config_data['ENVIRONMENT']['env_name'] + '_' + \
                            start_timestamp + '.log'
-            model_path = "TrainedModels/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' + \
+            model_path = "Training/TrainedModels/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' + \
                          start_timestamp + ".h5"
-            png_path = "TrainingPlots/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' + start_timestamp \
-                       + ".png"
+            png_path = "Training/TrainingPlots/FrozenLakeDQN/" + config_data['ENVIRONMENT'][
+                'env_name'] + '_' + start_timestamp + ".png"
 
-        os.rename('TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', logfile_path)
+        os.rename('Training/TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', logfile_path)
 
         # Data loggers for plotting training progress
         plot_data = {'EPISODES': [0.0],
