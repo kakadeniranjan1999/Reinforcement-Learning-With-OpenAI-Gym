@@ -21,7 +21,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 start_timestamp = datetime.datetime.now().strftime("%d-%h-%Y_%H-%M-%S")
 
 logging.basicConfig(format='%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s', level=logging.INFO,
-                    filename='logs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', filemode='w')
+                    filename='TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', filemode='w')
 data_logger = logging.getLogger()
 handler = logging.StreamHandler()
 formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: %(message)s')
@@ -242,7 +242,7 @@ if __name__ == "__main__":
         # Get configuration for environment, agent and neural network model
         config_data = read_config('config/FrozenLakeDQN.yml', data_logger)
 
-        os.rename('logs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', 'logs/FrozenLakeDQN/' +
+        os.rename('TrainingLogs/FrozenLakeDQN/GeneralLog_' + start_timestamp + '.log', 'TrainingLogs/FrozenLakeDQN/' +
                   config_data['ENVIRONMENT']['env_name'] + '_' + start_timestamp + '.log')
 
         # Instantiate environment
@@ -352,7 +352,7 @@ if __name__ == "__main__":
 
                     # save graph plot
                     plt.tight_layout()
-                    plt.savefig("InferenceData/FrozenLakeDQN/" + config_data['ENVIRONMENT'][
+                    plt.savefig("TrainingPlots/FrozenLakeDQN/" + config_data['ENVIRONMENT'][
                         'env_name'] + '_' + start_timestamp + ".png")
 
                     # if np.mean(plot_data['TOTAL_REWARD'][-min(10, len(plot_data['TOTAL_REWARD'])):]) > 5000:
@@ -361,7 +361,7 @@ if __name__ == "__main__":
                 # save model after every checkpoint episode provided by user
                 if episode % agent.model_checkpoint == 0:
                     agent.slave_model.save(
-                        "trained_models/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' +
+                        "TrainedModels/FrozenLakeDQN/" + config_data['ENVIRONMENT']['env_name'] + '_' +
                         start_timestamp + ".h5")
     except KeyboardInterrupt:
         data_logger.warning('KeyBoard Interrupt')
