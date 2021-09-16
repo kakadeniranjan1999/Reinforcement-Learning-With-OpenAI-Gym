@@ -19,10 +19,11 @@ console_output_format = '%(asctime)s :: %(levelname)s :: Line --> %(lineno)d :: 
 
 data_logger = get_logger(console_output_format, log_filename)
 
-model_path = "Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5"
 
 if __name__ == "__main__":
     try:
+        model_path = sys.argv[1]
+
         data_logger.info('Inference Game with Model {}'.format(model_path.split('/')[-1]))
         data_logger.info('--------------------------------------------------------------------------------------------------------------------------------')
         os.rename(log_filename, 'Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_' + start_timestamp + '.log')
@@ -100,5 +101,8 @@ if __name__ == "__main__":
                          "  Model Accuracy:{}".format((total_reward / episodes) * 100))
     except KeyboardInterrupt:
         data_logger.warning('Keyboard Interrupt')
+    except IndexError:
+        data_logger.error('Error at LINE --> {} --> {}'.format(sys.exc_info()[2].tb_lineno,
+                                                               'Require Model Path as an Argument!!!'))
     except Exception as e:
         data_logger.error('Error at LINE --> {} --> {}'.format(sys.exc_info()[2].tb_lineno, e))
