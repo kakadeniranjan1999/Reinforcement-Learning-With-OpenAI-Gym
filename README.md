@@ -119,7 +119,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 #### Inference-5 &emsp; Prob(Successful Chase) = 0.56 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-50-30.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-50-30.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-50-30.png" width="400" alt="Inference-5" title="Inference-5"/>
 
-#### Inference-6 &emsp; Prob(Successful Chase) = 0.54 Inference Logs = [FrozenLake-v1_15-Sep-2021_23-07-21.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.log)
+#### Inference-6 &emsp; Prob(Successful Chase) = 0.54 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_23-07-21.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.png" width="400" alt="Inference-6" title="Inference-6"/>
 
 
