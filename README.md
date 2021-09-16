@@ -104,22 +104,22 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 * [Model-1](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M1 tag.
 
 ### Model-1 Inference
-#### Inference-1 &emsp; &emsp; Prob(Successful Chase) = 0.62 &emsp; &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_21-30-35.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_21-30-35.log)
+#### Inference-1 &emsp; Prob(Successful Chase) = 0.62 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_21-30-35.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_21-30-35.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_21-30-35.png" width="400" alt="Inference-1" title="Inference-1"/>
 
-#### Inference-2 &emsp; &emsp; Prob(Successful Chase) = 0.53 &emsp; &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-19-45.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-19-45.log)
+#### Inference-2 &emsp; Prob(Successful Chase) = 0.53 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-19-45.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-19-45.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-19-45.png" width="400" alt="Inference-2" title="Inference-2"/>
 
-#### Inference-3 &emsp; &emsp; Prob(Successful Chase) = 0.56 &emsp; &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-29-48.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-29-48.log)
+#### Inference-3 &emsp; Prob(Successful Chase) = 0.56 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-29-48.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-29-48.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-29-48.png" width="400" alt="Inference-3" title="Inference-3"/>
 
-#### Inference-4 &emsp; &emsp; Prob(Successful Chase) = 0.57 &emsp; &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-40-40.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-40-40.log)
+#### Inference-4 &emsp; Prob(Successful Chase) = 0.57 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-40-40.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-40-40.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-40-40.png" width="400" alt="Inference-4" title="Inference-4"/>
 
-#### Inference-5 &emsp; &emsp; Prob(Successful Chase) = 0.56 &emsp; &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-50-30.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-50-30.log)
+#### Inference-5 &emsp; Prob(Successful Chase) = 0.56 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_22-50-30.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-50-30.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_22-50-30.png" width="400" alt="Inference-5" title="Inference-5"/>
 
-#### Inference-6 &emsp; &emsp; Prob(Successful Chase) = 0.54 &emsp; &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_23-07-21.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.log)
+#### Inference-6 &emsp; Prob(Successful Chase) = 0.54 Inference Logs = [FrozenLake-v1_15-Sep-2021_23-07-21.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.png" width="400" alt="Inference-6" title="Inference-6"/>
 
 
