@@ -103,7 +103,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 ### Model-1
 * [Model-1](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M1 tag.
 
-### Model-1 Inference
+### Model-1 Inference [Average Prob(Successful Chase) = 0.5633]
 #### Inference-1 &emsp; Prob(Successful Chase) = 0.62 &emsp; Inference Logs = [FrozenLake-v1_15-Sep-2021_21-30-35.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_21-30-35.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_21-30-35.png" width="400" alt="Inference-1" title="Inference-1"/>
 
