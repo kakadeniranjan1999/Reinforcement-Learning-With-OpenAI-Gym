@@ -58,7 +58,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
       * ```model_path```: "" &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # Define model_path if load_model_flag is True
 
     * NN_MODEL:
-      * ```neuron_units```: [32, 64]  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # [hidden layer1, hidden layer2]
+      * ```neuron_units```: [32, 64]  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # [hidden layer1, hidden layer2]
       * ```activations```: ['swish', 'swish', 'linear']  &emsp; # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
       
       * ```kernel_initializers```: ['he_uniform', 'he_uniform', 'he_uniform']  &ensp; # Refer https://keras.io/api/layers/initializers/
