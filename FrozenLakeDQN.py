@@ -130,7 +130,7 @@ class Agent:
         Computes executable action for the agent considering epsilon-greedy factor
         :return: executable action
         """
-        if self.min_epsilon < self.epsilon and not self.load_model_flag:
+        if np.random.rand() < self.epsilon and not self.load_model_flag:
             return random.randrange(self.action_size)
         else:
             q_value = self.slave_model.predict(self.current_state)
