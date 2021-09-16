@@ -19,7 +19,9 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
   * Edit the following params from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) :
     * ENVIRONMENT:
       * ```env_name```: 'FrozenLake-v1' 
+      
       * ```custom_map_flag```: False 
+      
       * ```custom_map```: [
           'SFFHF',
           'HFHFF',
@@ -27,30 +29,47 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
           'HHHFH',
           'HFFFG'
          ]  # Define custom_map of n x n dimensions only if custom_map_flag is set True
+         
       * ```render_flag```: False
+      
       * ```rewards```:
-        * ```positive_step_reward```: 0.25 &emsp; &emsp; # Reward for ending up on FROZEN surface 
-        * ```negative_step_reward```: -1.0 &emsp; &emsp; # Reward for ending up in HOLE 
-        * ```goal_step_reward```: 1.0 &emsp; &emsp; &emsp; &emsp; # Reward for ending up to GOAL
+      
+        * ```positive_step_reward```: 0.25 &emsp; # Reward for ending up on FROZEN surface 
+        
+        * ```negative_step_reward```: -1.0 &emsp; # Reward for ending up in HOLE 
+        
+        * ```goal_step_reward```: 1.0 &emsp; &emsp; # Reward for ending up to GOAL
 
     * AGENT:
       * ```total_episodes```: 50000 
+      
       * ```gamma```: 0.97 
+      
       * ```epsilon```: 1.0 
+      
       * ```min_epsilon```: 0.01 
+      
       * ```training_data_deque_max_len```: 1000 &emsp; &emsp; # Max length for deque array that stores training data 
-      * ```train_start_threshold```: 500 &emsp; &emsp; &emsp; &emsp; &emsp; # Starts training model after length of training_data_deque_max_len exceeds given value 
+      
+      * ```train_start_threshold```: 500 &emsp; &emsp; &emsp; # Starts training model after length of training_data_deque_max_len exceeds given value 
+      
       * ```load_model_flag```: False 
+      
       * ```model_path```: "" &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # Define model_path if load_model_flag is True
 
     * NN_MODEL:
-      * ```neuron_units```: [32, 64]  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # [hidden layer1, hidden layer2]
-      * ```activations```: ['swish', 'swish', 'linear']  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
-      * ```kernel_initializers```: ['he_uniform', 'he_uniform', 'he_uniform']  &ensp; &emsp; &emsp; &emsp; # Refer https://keras.io/api/layers/initializers/
-      * ```loss```: 'mse'  &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; &ensp; &ensp; &ensp; &emsp; &ensp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # Refer https://keras.io/api/losses/
+      * ```neuron_units```: [32, 64]  &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # [hidden layer1, hidden layer2]
+      * ```activations```: ['swish', 'swish', 'linear']  &emsp; # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
+      
+      * ```kernel_initializers```: ['he_uniform', 'he_uniform', 'he_uniform']  &ensp; # Refer https://keras.io/api/layers/initializers/
+      
+      * ```loss```: 'mse'  &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; &ensp; &emsp; &emsp; &emsp; &emsp; # Refer https://keras.io/api/losses/
+      
       * ```learning_rate```: 0.01 
+      
       * ```batch_size```: 32 
-      * ```model_checkpoint```: 50  &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; &ensp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; # Saves model after every given episodes
+      
+      * ```model_checkpoint```: 50  &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; # Saves model after every given episodes
 
 * #### Initiate Training
   * Run [FrozenLakeDQN.py](FrozenLakeDQN.py) using following command:
