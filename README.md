@@ -101,7 +101,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 ## II. Pre-Trained Model Inference
 
 ### Model-1
-* [Model-1](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M1 tag.
+* [Model-1](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from [FrozenLakeDQN-M1](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/releases/tag/FrozenLakeDQN-M1) release.
 
 <img height="450" src="NeuralNetworkAgent.png" width="638" alt="NeuralNetworkAgent" title="NeuralNetworkAgent"/>
 
@@ -134,6 +134,6 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 * Implementation of Q-Learning for FrozenLake-v1
 * Implementation of Deep Q-Learning for FrozenLake-v1
 * Added custom map support for FrozenLake-v1 environment
-* Trained Model-1 considering configurations from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M1 tag
+* Trained Model-1 considering configurations from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from [FrozenLakeDQN-M1](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/releases/tag/FrozenLakeDQN-M1) release
 
 
