@@ -149,7 +149,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 
 
 ## Model-2
-* [Model-2](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M2_v1.0 release.
+* [Model-2](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from [FrozenLakeDQN-M2_v1.0](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/releases/tag/FrozenLakeDQN-M2) release.
 
 ### Model-2 Training Plots
 * Epochs = 1050 &emsp; Total reward = 5883.25 &emsp; Total success = 318 &emsp; Avg Loss:0.02022 &emsp; Training Logs = [FrozenLake-v1_16-Sep-2021_15-53-31.log](Training/TrainingLogs/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.log) &emsp; Trained Model = [FrozenLake-v1_16-Sep-2021_15-53-31.h5](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.h5)
