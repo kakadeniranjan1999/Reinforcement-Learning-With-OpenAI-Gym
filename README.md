@@ -126,10 +126,9 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 
 
 ## III. Future Scope for Improvement
-### Futher improvements can be obtained using:
+### Further improvements can be obtained using:
   * Model optimization using optimization techniques
   * Training agent with different configurations (maybe best possible) from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml)
-
 
 ## Change Logs
 * Implementation of Q-Learning for FrozenLake-v1
