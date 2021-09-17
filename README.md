@@ -192,6 +192,6 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 * Implementation of Deep Q-Learning for FrozenLake-v1
 * Added custom map support for FrozenLake-v1 environment
 * Trained Model-1 considering configurations from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from [FrozenLakeDQN-M1_v1.0](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/releases/tag/FrozenLakeDQN-M1) release
-* Trained Model-2 considering configurations from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M2_v1.0 release
+* Trained Model-2 considering configurations from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from [FrozenLakeDQN-M2_v1.0](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/releases/tag/FrozenLakeDQN-M2) release
 
 
