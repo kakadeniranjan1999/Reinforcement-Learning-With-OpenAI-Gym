@@ -26,7 +26,7 @@ AGENT:
 
 NN_MODEL:
   neuron_units: [32, 64]  # [hidden layer1, hidden layer2]
-  activations: ['swish', 'swish', 'linear']  # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
+  activations: ['relu', 'relu', 'linear']  # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
   kernel_initializers: ['he_uniform', 'he_uniform', 'he_uniform']  # Refer https://keras.io/api/layers/initializers/
   loss: 'mse'  # Refer https://keras.io/api/losses/
   learning_rate: 0.01
