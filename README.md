@@ -38,4 +38,4 @@ This repository provides pre-trained agents (models) as well as easy-to-use cust
 
 ## Change Logs
 * Implementation of OpenAI Gym introduction code
-* Deep Q-Learning implemented for FrozenLake-v1
+* Deep Q-Learning implemented for [FrozenLake-v1](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/tree/FrozenLakeDQN)
