@@ -32,7 +32,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
          
       * ```render_flag```: False
       
-      * ```rewards```:
+      * ```rewards```:  # Customized rewards to the agent for better training flow
       
         * ```positive_step_reward```: 0.25 &emsp; # Reward for ending up on FROZEN surface 
         
@@ -125,6 +125,10 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_15-Sep-2021_23-07-21.png" width="400" alt="Inference-6" title="Inference-6"/>
 
 
+## III. Future Scope for Improvement
+### Futher improvements can be obtained using:
+  * Model optimization using optimization techniques
+  * Training agent with different configurations (maybe best possible) from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml)
 
 
 ## Change Logs
