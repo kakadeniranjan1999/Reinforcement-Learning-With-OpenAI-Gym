@@ -15,7 +15,8 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
   * [Model-2](#model-2)
     * [Model-2 Training Plots](#model-2-training-plots)
     * [Model-2 Inference](#model-2-inference-average-probsuccessful-chase--04367)
-* [Future Scope for Development](#iii-future-scope-for-improvement)
+  * [Conclusion](#conclusion)
+  * [Future Scope for Development](#future-scope-for-improvement)
 * [Change Logs](#change-logs)
 
 
@@ -123,7 +124,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 ## Model-1
 * [Model-1](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from [FrozenLakeDQN-M1_v1.0](https://github.com/kakadeniranjan1999/Reinforcement-Learning-With-OpenAI-Gym/releases/tag/FrozenLakeDQN-M1) release.
 ### Model-1 Training Plots
-* Training Logs = [FrozenLake-v1_14-Sep-2021_20-01-42.log](Training/TrainingLogs/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.log) &emsp; Trained Model = [FrozenLake-v1_14-Sep-2021_20-01-42.h5](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5)
+* Epochs = 1050 &emsp; Total reward = 8064.75 &emsp; Total success = 393 &emsp; Avg Loss:0.00657 &emsp; Training Logs = [FrozenLake-v1_14-Sep-2021_20-01-42.log](Training/TrainingLogs/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.log) &emsp; Trained Model = [FrozenLake-v1_14-Sep-2021_20-01-42.h5](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5)
 
 * <img height="400" src="Training/TrainingPlots/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.png" width="400" alt="Training Plot" title="Training Plot"/>
 
@@ -151,7 +152,7 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 * [Model-2](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.h5) is trained considering the parameters from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml) from FrozenLakeDQN-M2_v1.0 release.
 
 ### Model-2 Training Plots
-* Training Logs = [FrozenLake-v1_16-Sep-2021_15-53-31.log](Training/TrainingLogs/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.log) &emsp; Trained Model = [FrozenLake-v1_16-Sep-2021_15-53-31.h5](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.h5)
+* Epochs = 1050 &emsp; Total reward = 5883.25 &emsp; Total success = 318 &emsp; Avg Loss:0.02022 &emsp; Training Logs = [FrozenLake-v1_16-Sep-2021_15-53-31.log](Training/TrainingLogs/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.log) &emsp; Trained Model = [FrozenLake-v1_16-Sep-2021_15-53-31.h5](Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.h5)
 
 * <img height="400" src="Training/TrainingPlots/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_15-53-31.png" width="400" alt="Training Plot" title="Training Plot"/>
 
@@ -174,12 +175,17 @@ This repository branch provides pre-trained agents (models) as well as easy-to-u
 #### Inference-6 &emsp; Prob(Successful Chase) = 0.42 &emsp; Inference Logs = [FrozenLake-v1_16-Sep-2021_20-45-34.log](Inference/InferenceLogs/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_20-45-34.log)
 <img height="400" src="Inference/InferencePlots/FrozenLakeDQN/FrozenLake-v1_16-Sep-2021_20-45-34.png" width="400" alt="Inference-6" title="Inference-6"/>
 
+### Conclusion
+#### From all the above inferences, it can be concluded that:
+  * Model-1 using swish activation function for hidden layers is found to be fast learner than Model-2 using relu activation for hidden layers.
 
-## III. Future Scope for Improvement
-### Further improvements can be obtained using:
+### Future Scope for Improvement
+#### Further improvements can be obtained using:
   * Model optimization using optimization techniques
   * Training agent with different configurations (maybe best possible) from [FrozenLakeDQN.yml](config/FrozenLakeDQN.yml)
   * Further training of the pretrained models
+
+
 
 ## Change Logs
 * Implementation of Q-Learning for FrozenLake-v1
