@@ -21,12 +21,12 @@ AGENT:
   min_epsilon: 0.01
   training_data_deque_max_len: 1000  # Max length for deque array that stores training data
   train_start_threshold: 500  # Starts training model after length of training_data_deque_max_len exceeds given value
-  load_model_flag: False
-  model_path: ''  # Define model_path if load_model_flag is True
+  load_model_flag: True
+  model_path: 'Training/TrainedModels/FrozenLakeDQN/FrozenLake-v1_14-Sep-2021_20-01-42.h5'  # Define model_path if load_model_flag is True
 
 NN_MODEL:
   neuron_units: [32, 64]  # [hidden layer1, hidden layer2]
-  activations: ['relu', 'relu', 'linear']  # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
+  activations: ['swish', 'swish', 'linear']  # [layer1, layer2, output_layer] Refer https://keras.io/api/layers/activations/
   kernel_initializers: ['he_uniform', 'he_uniform', 'he_uniform']  # Refer https://keras.io/api/layers/initializers/
   loss: 'mse'  # Refer https://keras.io/api/losses/
   learning_rate: 0.01
